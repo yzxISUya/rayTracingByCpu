@@ -1,0 +1,4 @@
+{
+    "cmake.sourceDirectory": "D:/myProjects/ray-Tracing/Ray_TracingByGpu/Walnut/vendor/imgui/examples/example_glfw_vulkan",
+    "C_Cpp.default.compilerPath": "D:/msys64/mingw64/bin/g++.exe"
+}
