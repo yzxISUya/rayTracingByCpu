@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-
 #include <vector>
 
 struct Material
@@ -12,7 +11,7 @@ struct Material
 	glm::vec3 EmissionColor{ 0.0f };
 	float EmissionPower = 0.0f;
 
-	glm::vec3 GetEmission() const { return EmissionColor * EmissionPower; }
+	glm::vec3 GetEmission() const { return EmissionColor * EmissionPower; }//“*”已重载
 };
 
 struct Sphere
@@ -20,7 +19,7 @@ struct Sphere
 	glm::vec3 Position{0.0f};
 	float Radius = 0.5f;
 
-	int MaterialIndex = 0;
+	int MaterialIndex = 0;//使用的材质是哪个
 };
 
 struct Scene

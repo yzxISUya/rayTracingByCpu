@@ -9,6 +9,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 
+//三件事：发射光线、碰撞检测、计算颜色
 class Renderer
 {
 public:
