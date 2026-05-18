@@ -20,6 +20,7 @@ public:
 		Material& pinkSphere = m_Scene.Materials.emplace_back();
 		pinkSphere.Albedo = { 1.0f, 0.0f, 1.0f };
 		pinkSphere.Roughness = 0.0f;
+		pinkSphere.Metallic = 1.0f;
 
 		Material& blueSphere = m_Scene.Materials.emplace_back();
 		blueSphere.Albedo = { 0.2f, 0.3f, 1.0f };

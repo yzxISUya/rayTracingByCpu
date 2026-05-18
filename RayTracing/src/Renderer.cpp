@@ -117,20 +117,28 @@ glm::vec4 Renderer::PerPixel(uint32_t x, uint32_t y)
 		if (payload.HitDistance < 0.0f)
 		{
 			glm::vec3 skyColor = glm::vec3(0.6f, 0.7f, 0.9f);
-			//light += skyColor * contribution;
+			light += skyColor * contribution;
 			break;
 		}
 
 		const Sphere& sphere = m_ActiveScene->Spheres[payload.ObjectIndex];
 		const Material& material = m_ActiveScene->Materials[sphere.MaterialIndex];
 
-		contribution *= material.Albedo;
 		light += material.GetEmission();
 
+		if (material.Metallic >= 0.5f)
+		{
+			ray.Direction = glm::reflect(ray.Direction,
+				payload.WorldNormal + material.Roughness * Walnut::Random::InUnitSphere());
+			contribution *= material.Albedo;
+		}
+		else
+		{
+			contribution *= material.Albedo;
+			ray.Direction = glm::normalize(payload.WorldNormal + Walnut::Random::InUnitSphere());
+		}
+
 		ray.Origin = payload.WorldPosition + payload.WorldNormal * 0.0001f;
-		//ray.Direction = glm::reflect(ray.Direction,
-		//	payload.WorldNormal + material.Roughness * Walnut::Random::Vec3(-0.5f, 0.5f));
-		ray.Direction = glm::normalize(payload.WorldNormal + Walnut::Random::InUnitSphere());
 	}
 
 	return glm::vec4(light, 1.0f);
