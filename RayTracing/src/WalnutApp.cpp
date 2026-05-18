@@ -17,14 +17,15 @@ public:
 	ExampleLayer()
 		: m_Camera(45.0f, 0.1f, 100.0f)
 	{
-		Material& pinkSphere = m_Scene.Materials.emplace_back();
-		pinkSphere.Albedo = { 1.0f, 0.0f, 1.0f };
-		pinkSphere.Roughness = 0.0f;
-		pinkSphere.Metallic = 1.0f;
+		Material& redSphere = m_Scene.Materials.emplace_back();
+		redSphere.Albedo = { 1.0f, 0.0f, 0.0f };
+		redSphere.Roughness = 0.3f;
+		redSphere.Metallic = 1.0f;
 
-		Material& blueSphere = m_Scene.Materials.emplace_back();
-		blueSphere.Albedo = { 0.2f, 0.3f, 1.0f };
-		blueSphere.Roughness = 0.1f;
+		Material& silverSphere = m_Scene.Materials.emplace_back();
+		silverSphere.Albedo = { 0.3f, 0.3f, 0.3f };
+		silverSphere.Roughness = 0.1f;
+		silverSphere.Metallic = 1.0f;
 
 		Material& orangeSphere = m_Scene.Materials.emplace_back();
 		orangeSphere.Albedo = { 0.8f, 0.5f, 0.2f };

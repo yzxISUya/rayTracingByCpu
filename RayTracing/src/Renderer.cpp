@@ -8,9 +8,9 @@ namespace Utils {
 
 	static uint32_t ConvertToRGBA(const glm::vec4& color)
 	{
-		uint8_t r = (uint8_t)(color.r * 255.0f);
-		uint8_t g = (uint8_t)(color.g * 255.0f);
-		uint8_t b = (uint8_t)(color.b * 255.0f);
+		uint8_t r = (uint8_t)(glm::sqrt(color.r) * 255.0f);
+		uint8_t g = (uint8_t)(glm::sqrt(color.g) * 255.0f);
+		uint8_t b = (uint8_t)(glm::sqrt(color.b) * 255.0f);
 		uint8_t a = (uint8_t)(color.a * 255.0f);
 
 		uint32_t result = (a << 24) | (b << 16) | (g << 8) | r;
@@ -116,7 +116,9 @@ glm::vec4 Renderer::PerPixel(uint32_t x, uint32_t y)
 		Renderer::HitPayload payload = TraceRay(ray);
 		if (payload.HitDistance < 0.0f)
 		{
-			glm::vec3 skyColor = glm::vec3(0.6f, 0.7f, 0.9f);
+			glm::vec3 unitDir = glm::normalize(ray.Direction);
+			float t = 0.5f * (unitDir.y + 1.0f);
+			glm::vec3 skyColor = (1.0f - t) * glm::vec3(1.0f) + t * glm::vec3(0.5f, 0.7f, 1.0f);
 			light += skyColor * contribution;
 			break;
 		}
