@@ -1,5 +1,5 @@
 #pragma once
-
+//球体，材质的定义
 #include <glm/glm.hpp>
 #include <vector>
 

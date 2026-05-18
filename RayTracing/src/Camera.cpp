@@ -36,7 +36,7 @@ bool Camera::OnUpdate(float ts)
 
 	float speed = 5.0f;
 
-	// Movement
+	//动
 	if (Input::IsKeyDown(KeyCode::W))
 	{
 		m_Position += m_ForwardDirection * speed * ts;
@@ -68,7 +68,7 @@ bool Camera::OnUpdate(float ts)
 		moved = true;
 	}
 
-	// Rotation
+	//不动，但转
 	if (delta.x != 0.0f || delta.y != 0.0f)
 	{
 		float pitchDelta = delta.y * GetRotationSpeed();

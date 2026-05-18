@@ -1,5 +1,5 @@
 #pragma once
-
+//把像素坐标转化为光线方向
 #include <glm/glm.hpp>
 #include <vector>
 
