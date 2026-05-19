@@ -11,7 +11,7 @@ struct Material
 	glm::vec3 EmissionColor{ 0.0f };
 	float EmissionPower = 0.0f;
 
-	glm::vec3 GetEmission() const { return EmissionColor * EmissionPower; }//“*”已重载
+	glm::vec3 GetEmission() const { return EmissionColor * EmissionPower; }//点乘
 };
 
 struct Sphere

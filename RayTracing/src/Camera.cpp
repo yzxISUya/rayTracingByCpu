@@ -18,7 +18,7 @@ Camera::Camera(float verticalFOV, float nearClip, float farClip)
 bool Camera::OnUpdate(float ts)
 {
 	glm::vec2 mousePos = Input::GetMousePosition();
-	glm::vec2 delta = (mousePos - m_LastMousePosition) * 0.002f;
+	glm::vec2 delta = (mousePos - m_LastMousePosition) * 0.002f;//鼠标灵敏度系数
 	m_LastMousePosition = mousePos;
 
 	if (!Input::IsMouseButtonDown(MouseButton::Right))
@@ -27,7 +27,7 @@ bool Camera::OnUpdate(float ts)
 		return false;
 	}
 
-	Input::SetCursorMode(CursorMode::Locked);
+	Input::SetCursorMode(CursorMode::Locked); //右键按住就锁鼠标，进入FPS模式
 
 	bool moved = false;
 
@@ -36,7 +36,6 @@ bool Camera::OnUpdate(float ts)
 
 	float speed = 5.0f;
 
-	//动
 	if (Input::IsKeyDown(KeyCode::W))
 	{
 		m_Position += m_ForwardDirection * speed * ts;
@@ -68,14 +67,14 @@ bool Camera::OnUpdate(float ts)
 		moved = true;
 	}
 
-	//不动，但转
 	if (delta.x != 0.0f || delta.y != 0.0f)
 	{
-		float pitchDelta = delta.y * GetRotationSpeed();
-		float yawDelta = delta.x * GetRotationSpeed();
+		float pitchDelta = delta.y * GetRotationSpeed(); //上下看
+		float yawDelta = delta.x * GetRotationSpeed();   //左右看
 
-		glm::quat q = glm::normalize(glm::cross(glm::angleAxis(-pitchDelta, rightDirection),
-			glm::angleAxis(-yawDelta, glm::vec3(0.f, 1.0f, 0.0f))));
+		//四元数：先组合pitch和yaw，再作用到forward方向上
+		glm::quat q = glm::normalize(glm::cross(glm::angleAxis(-pitchDelta, rightDirection), glm::angleAxis(-yawDelta, glm::vec3(0.f, 1.0f, 0.0f))));
+		
 		m_ForwardDirection = glm::rotate(q, m_ForwardDirection);
 
 		moved = true;
@@ -110,29 +109,40 @@ float Camera::GetRotationSpeed()
 void Camera::RecalculateProjection()
 {
 	m_Projection = glm::perspectiveFov(glm::radians(m_VerticalFOV), (float)m_ViewportWidth, (float)m_ViewportHeight, m_NearClip, m_FarClip);
-	m_InverseProjection = glm::inverse(m_Projection);
+	m_InverseProjection = glm::inverse(m_Projection); //用逆矩阵把屏幕坐标转回3D方向
 }
 
 void Camera::RecalculateView()
 {
+	//lookAt(眼睛位置, 看向的点, 世界上方向) → 观察矩阵
 	m_View = glm::lookAt(m_Position, m_Position + m_ForwardDirection, glm::vec3(0, 1, 0));
-	m_InverseView = glm::inverse(m_View);
+	m_InverseView = glm::inverse(m_View); //逆视图矩阵把相机空间方向转到世界空间
 }
 
 void Camera::RecalculateRayDirections()
 {
+	//预计算每个像素对应的光线方向
 	m_RayDirections.resize(m_ViewportWidth * m_ViewportHeight);
 
 	for (uint32_t y = 0; y < m_ViewportHeight; y++)
 	{
 		for (uint32_t x = 0; x < m_ViewportWidth; x++)
 		{
+			//屏幕像素坐标 → NDC坐标 [-1,1]
 			glm::vec2 coord = { (float)x / (float)m_ViewportWidth, (float)y / (float)m_ViewportHeight };
-			coord = coord * 2.0f - 1.0f;//[-1, 1]
+			coord = coord * 2.0f - 1.0f;
 
-			glm::vec4 target = m_InverseProjection * glm::vec4(coord.x, coord.y, 1, 1);//投影矩阵的逆矩阵，vec4为齐次坐标，这一步就是屏幕坐标->相机空间的方向
-			glm::vec3 rayDirection = glm::vec3(m_InverseView * glm::vec4(glm::normalize(glm::vec3(target) / target.w), 0)); // World space
+			//NDC → 相机空间方向（除以w做透视除法）
+			glm::vec4 target = m_InverseProjection * glm::vec4(coord.x, coord.y, 1, 1);
+			//相机空间 → 世界空间方向（w=0因为方向向量不需要平移）
+			glm::vec3 rayDirection = glm::vec3(m_InverseView * glm::vec4(glm::normalize(glm::vec3(target) / target.w), 0));
 			m_RayDirections[x + y * m_ViewportWidth] = rayDirection;
 		}
 	}
+}
+
+void Camera::SetPosition(const glm::vec3& pos)
+{
+	m_Position = pos;
+	RecalculateView();
 }

@@ -21,6 +21,13 @@ public:
 
 	const std::vector<glm::vec3>& GetRayDirections() const { return m_RayDirections; }
 
+	float GetAperture() const { return m_Aperture; }
+	float GetFocusDistance() const { return m_FocusDistance; }
+
+	void SetAperture(float aperture) { m_Aperture = aperture; }
+	void SetFocusDistance(float dist) { m_FocusDistance = dist; }
+	void SetPosition(const glm::vec3& pos);
+
 	float GetRotationSpeed();
 private:
 	void RecalculateProjection();      //重算投影矩阵
@@ -35,6 +42,9 @@ private:
 	float m_VerticalFOV = 45.0f;     //垂直视野角度（Field of View）
 	float m_NearClip = 0.1f;         //近裁剪面
 	float m_FarClip = 100.0f;        //远裁剪面
+
+	float m_Aperture = 0.0f;         //光圈大小（0=针孔，无景深）
+	float m_FocusDistance = 5.0f;     //焦距（焦平面到相机的距离）
 
 	glm::vec3 m_Position{ 0.0f, 0.0f, 0.0f };      //相机在哪
 	glm::vec3 m_ForwardDirection{ 0.0f, 0.0f, 0.0f }; //相机朝哪看
