@@ -137,7 +137,7 @@ glm::vec4 Renderer::PerPixel(uint32_t x, uint32_t y)
 	glm::vec3 light(0.0f);       //累计的光颜色
 	glm::vec3 contribution(1.0f); //衰减系数，每次弹射乘以albedo
 
-	int bounces = 4; //最多弹射5次
+	int bounces = 5; //最多弹射5次
 	for (int i = 0; i < bounces; i++)
 	{
 		Renderer::HitPayload payload = TraceRay(ray);
@@ -145,8 +145,8 @@ glm::vec4 Renderer::PerPixel(uint32_t x, uint32_t y)
 		{
 			//根据光线方向y分量做天空渐变（白→蓝）
 			glm::vec3 unitDir = glm::normalize(ray.Direction);
-			float t = 0.5f * (unitDir.y + 1.0f);
-			glm::vec3 skyColor = (1.0f - t) * glm::vec3(1.0f) + t * glm::vec3(0.5f, 0.7f, 1.0f);
+			float t = 0.5f * (unitDir.y + 0.2f);
+			glm::vec3 skyColor = (1.0f - t) * glm::vec3(0.0f) + t * glm::vec3(0.5f, 0.7f, 1.0f);
 			light += skyColor * contribution;
 			break;
 		}
