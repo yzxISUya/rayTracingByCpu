@@ -156,8 +156,8 @@ glm::vec4 Renderer::PerPixel(uint32_t x, uint32_t y)
 
 		light += material.GetEmission(); //自发光直接加上去
 
-		//金属和漫反射的弹射策略不同
-		if (material.Metallic >= 0.5f)
+		//金属度作为概率：每条光线随机走镜面或漫反射，多帧累积后自然混合
+		if (Walnut::Random::Float() < material.Metallic)
 		{
 			//金属：镜面反射，Roughness越大反射越模糊
 			ray.Direction = glm::reflect(ray.Direction,

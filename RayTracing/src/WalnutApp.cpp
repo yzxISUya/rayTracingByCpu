@@ -230,8 +230,8 @@ public:
 		{
 			Material& mat = m_Scene.Materials.emplace_back();
 			mat.Albedo = baseColor;
-			mat.Roughness = i * 0.25f;
-			mat.Metallic = 0.5f;
+			mat.Roughness = i * 0.2f;
+			mat.Metallic = 0.6f;
 		}
 
 		// 5个金属档位
@@ -240,7 +240,7 @@ public:
 			Material& mat = m_Scene.Materials.emplace_back();
 			mat.Albedo = baseColor;
 			mat.Roughness = 0.0f;
-			mat.Metallic = 1 - i * 0.25f;
+			mat.Metallic = 1 - i * 0.2f;
 		}
 
 		// 太阳
@@ -539,7 +539,7 @@ Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
 	spec.Name = "Ray Tracing";
 
 	Walnut::Application* app = new Walnut::Application(spec);
-	app->PushLayer<ExampleLayer3>();
+	app->PushLayer<ExampleLayer2>();
 	app->SetMenubarCallback([app]()
 	{
 		if (ImGui::BeginMenu("File"))
